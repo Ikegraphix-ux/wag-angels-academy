@@ -75,7 +75,7 @@
     if (isHome) {
       first.append(original);
     } else {
-      original.classList.remove('narrow');
+      original.classList.remove('narrow', 'wrap');
       original.classList.add('slide-copy');
       const layout = document.createElement('div');
       layout.className = 'slide-layout wrap';
@@ -142,6 +142,10 @@
     let timer = null;
     let manuallyPaused = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let temporarilyPaused = false;
+    if (manuallyPaused) {
+      pause.textContent = 'Play';
+      pause.setAttribute('aria-label', 'Play automatic slides');
+    }
 
     function clearTimer() {
       if (timer) window.clearInterval(timer);
