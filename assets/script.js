@@ -263,7 +263,7 @@ function handleContact(e) {
     valid = false;
   }
 
-  if (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+  if (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
     email.classList.add('error');
     errEmail.textContent = 'Please enter a valid email address.';
     valid = false;
@@ -281,45 +281,47 @@ function handleContact(e) {
     return;
   }
 
-  // Simulate submission
-  const form = document.getElementById('contactForm');
   const success = document.getElementById('formSuccess');
-  const submitBtn = form.querySelector('button[type="submit"]');
+  const subject = document.getElementById('cSubject').value || 'General Enquiry';
+  const body = [
+    'Name: ' + name.value.trim(),
+    'Email: ' + email.value.trim(),
+    'Phone: ' + document.getElementById('cPhone').value.trim(),
+    '',
+    msg.value.trim()
+  ].join('\n');
+  const mailto = 'mailto:info@wagangelsacademy.edu.gh?subject=' +
+    encodeURIComponent('WAG Angels Academy — ' + subject) +
+    '&body=' + encodeURIComponent(body);
 
-  submitBtn.textContent = 'Sending…';
-  submitBtn.disabled = true;
-
-  setTimeout(() => {
-    form.style.display = 'none';
-    success.style.display = 'block';
-  }, 1200);
+  success.textContent = 'Your email app should open with this message. Select Send there to deliver it. If it does not open, email info@wagangelsacademy.edu.gh.';
+  success.style.display = 'block';
+  window.location.href = mailto;
 }
 
 /* ============================================================
    7. NEWSLETTER FORM
    ============================================================ */
-function handleNewsletter() {
+function handleNewsletter(event) {
+  event.preventDefault();
   const input = document.getElementById('nlEmail');
-  if (!input) return;
+  const feedback = document.getElementById('newsletterFeedback');
+  if (!input || !feedback) return;
 
   const email = input.value.trim();
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    input.style.borderColor = 'var(--red)';
-    input.placeholder = 'Please enter a valid email';
-    setTimeout(() => {
-      input.style.borderColor = '';
-      input.placeholder = 'Enter your email address';
-    }, 2500);
+    input.setAttribute('aria-invalid', 'true');
+    feedback.textContent = 'Enter a valid email address to request a subscription.';
+    input.focus();
     return;
   }
 
-  input.value = '';
-  input.placeholder = '✓ Subscribed! Thank you.';
-  input.style.borderColor = 'var(--green)';
-  setTimeout(() => {
-    input.placeholder = 'Enter your email address';
-    input.style.borderColor = '';
-  }, 4000);
+  input.removeAttribute('aria-invalid');
+  const subject = encodeURIComponent('Newsletter subscription request');
+  const body = encodeURIComponent('Please add this address to the WAG Angels Academy newsletter: ' + email);
+  feedback.textContent = 'Your email app should open with this request. Select Send to complete it. If it does not open, email info@wagangelsacademy.edu.gh.';
+  window.location.href = 'mailto:info@wagangelsacademy.edu.gh?subject=' + subject + '&body=' + body;
+}
 }
 
 /* ============================================================
