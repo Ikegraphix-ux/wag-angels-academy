@@ -644,7 +644,7 @@
                 <h4>Admissions Open for 2025/2026 Academic Year</h4>
                 <p class="nc-date"><i class="fas fa-calendar"></i> June 20, 2025</p>
                 <p>Enrolment is now open for all classes. Limited spaces available — secure your child's place today.</p>
-                <a href="#admissions" class="nc-link">Read More <i class="fas fa-arrow-right"></i></a>
+                <a href="#contact" class="nc-link">Enquire about this <i class="fas fa-arrow-right"></i></a>
             </div>
             </div>
             <div class="news-card">
@@ -654,7 +654,7 @@
                 <h4>WAG Angels Wins Regional Quiz Championship 2024</h4>
                 <p class="nc-date"><i class="fas fa-calendar"></i> June 20, 2025</p>
                 <p>Our JHS team emerged champions at the Kumasi Municipal Academic Quiz, defeating 12 other schools.</p>
-                <a href="#" class="nc-link">Read More <i class="fas fa-arrow-right"></i></a>
+                <a href="#contact" class="nc-link">Enquire about this <i class="fas fa-arrow-right"></i></a>
             </div>
             </div>
             <div class="news-card">
@@ -664,7 +664,7 @@
                 <h4>Annual Cultural Day Celebration — Save the Date</h4>
                 <p class="nc-date"><i class="fas fa-calendar"></i> June 20, 2025</p>
                 <p>Join us for a vibrant celebration of Ghanaian culture, food, music, and tradition on 14th July 2025.</p>
-                <a href="#" class="nc-link">Read More <i class="fas fa-arrow-right"></i></a>
+                <a href="#contact" class="nc-link">Enquire about this <i class="fas fa-arrow-right"></i></a>
             </div>
             </div>
         </div>
@@ -699,8 +699,11 @@
                 <p>Stay updated with school news, events, and announcements.</p>
             </div>
             <div class="nl-form">
-                <input type="email" id="nlEmail" placeholder="Enter your email address" />
-                <button class="btn btn-primary" onclick="handleNewsletter()">Subscribe</button>
+                <form class="nl-form" id="newsletterForm" onsubmit="handleNewsletter(event)" novalidate>
+                    <input type="email" id="nlEmail" placeholder="Enter your email address" aria-label="Email address for newsletter request" required />
+                    <button type="submit" class="btn btn-primary">Request subscription</button>
+                    <p id="newsletterFeedback" class="form-feedback" role="status" aria-live="polite"></p>
+                </form>
             </div>
             </div>
         </div>
@@ -795,10 +798,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary full-w">Send Message <i class="fas fa-paper-plane"></i></button>
                 </form>
-                <div class="form-success" id="formSuccess">
-                <i class="fas fa-check-circle"></i>
-                <p>Thank you! We've received your message and will be in touch shortly.</p>
-                </div>
+                <div class="form-success" id="formSuccess" role="status" aria-live="polite"></div>                </div>
             </div>
             </div>
 
