@@ -266,6 +266,8 @@
       if (moveFocus) tabs[index].focus();
     };
     tabs.forEach((tab, index) => tab.addEventListener('click', () => activate(index, false)));
+    const hashPanel = tabs.findIndex(tab => tab.getAttribute('aria-controls') === window.location.hash.slice(1));
+    if (hashPanel > 0) activate(hashPanel, false);
     tabList.addEventListener('keydown', event => {
       const index = tabs.indexOf(document.activeElement);
       if (index < 0) return;
