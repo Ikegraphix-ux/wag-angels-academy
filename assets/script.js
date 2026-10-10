@@ -249,4 +249,63 @@
         '&body=' + encodeURIComponent(body);
     });
   }
+
+  const tabList = document.querySelector('[role="tablist"]');
+  if (tabList) {
+    const tabs = [...tabList.querySelectorAll('[role="tab"]')];
+    const panels = tabs.map(tab => document.getElementById(tab.getAttribute('aria-controls')));
+    const activate = (index, moveFocus) => {
+      tabs.forEach((tab, i) => {
+        const active = i === index;
+        tab.classList.toggle('is-active', active);
+        tab.setAttribute('aria-selected', String(active));
+        tab.tabIndex = active ? 0 : -1;
+        panels[i].hidden = !active;
+        panels[i].classList.toggle('is-active', active);
+      });
+      if (moveFocus) tabs[index].focus();
+    };
+    tabs.forEach((tab, index) => tab.addEventListener('click', () => activate(index, false)));
+    tabList.addEventListener('keydown', event => {
+      const index = tabs.indexOf(document.activeElement);
+      if (index < 0) return;
+      if (event.key === 'ArrowRight') { event.preventDefault(); activate((index + 1) % tabs.length, true); }
+      if (event.key === 'ArrowLeft') { event.preventDefault(); activate((index - 1 + tabs.length) % tabs.length, true); }
+      if (event.key === 'Home') { event.preventDefault(); activate(0, true); }
+      if (event.key === 'End') { event.preventDefault(); activate(tabs.length - 1, true); }
+    });
+  }
+
+  const galleryFilters = [...document.querySelectorAll('.gallery-filter')];
+  const galleryItems = [...document.querySelectorAll('.gallery-item')];
+  galleryFilters.forEach(filter => filter.addEventListener('click', () => {
+    galleryFilters.forEach(button => {
+      const active = button === filter;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-pressed', String(active));
+    });
+    galleryItems.forEach(item => {
+      item.hidden = filter.dataset.filter !== 'all' && item.dataset.category !== filter.dataset.filter;
+    });
+  }));
+
+  const newsletter = document.querySelector('#newsletterForm');
+  if (newsletter) {
+    newsletter.addEventListener('submit', event => {
+      event.preventDefault();
+      const email = document.querySelector('#newsletterEmail');
+      const feedback = document.querySelector('#newsletterFeedback');
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+        email.setAttribute('aria-invalid', 'true');
+        feedback.textContent = 'Enter a valid email address to request updates.';
+        email.focus();
+        return;
+      }
+      email.removeAttribute('aria-invalid');
+      feedback.textContent = 'Your email app should open with a request. Send it there to contact the school.';
+      window.location.href = 'mailto:info@wagangelsacademy.edu.gh?subject=' +
+        encodeURIComponent('Request for WAG Angels Academy email updates') +
+        '&body=' + encodeURIComponent('Please contact me about school email updates. My email address is ' + email.value.trim() + '.');
+    });
+  }
 })();
